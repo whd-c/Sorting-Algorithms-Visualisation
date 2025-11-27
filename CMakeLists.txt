@@ -23,6 +23,9 @@ set(SOURCE_FILES
     src/textbox.cpp
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     ${RAYLIB_PLATFORM_DEFINITIONS}

@@ -16,7 +16,7 @@ Program::~Program()
 
 void Program::resizeRectVector(std::vector<Rectangle> &rectangles)
 {
-    // TODO: Fix elements not showing if elements > 8161
+    // TODO: Fix elements not showing if elements > 8155
     if (elements <= 0)
         return;
     rectangles.resize(elements);
@@ -52,7 +52,7 @@ void Program::run()
             DrawRectangleGradientEx(rect, GREEN, DARKGREEN, DARKGREEN, GREEN);
         }
         textBox.update();
-        if (textBox.keyPressed() && atoi(textBox.getInput()) < 8161 && elements != atoi(textBox.getInput()))
+        if (textBox.keyPressed() && atoi(textBox.getInput()) < 8155 && elements != atoi(textBox.getInput()))
         {
             elements = atoi(textBox.getInput());
             resizeRectVector(rectangles);
