@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "common.hpp"
 #include <vector>
+#include <string>
 
 class Program
 {
