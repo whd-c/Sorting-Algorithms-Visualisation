@@ -5,7 +5,7 @@
 class Textbox
 {
 public:
-    Textbox(float x, float y, float width, float height);
+    Textbox(Rectangle _rect) : rect(_rect) {};
     void update();
     bool keyPressed();
 

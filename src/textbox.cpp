@@ -1,14 +1,6 @@
 #include "textbox.hpp"
 #include <iostream>
 
-Textbox::Textbox(float x, float y, float width, float height)
-{
-    rect.x = x;
-    rect.y = y;
-    rect.width = width;
-    rect.height = height;
-}
-
 bool Textbox::keyPressed()
 {
     bool keyPressed = false;

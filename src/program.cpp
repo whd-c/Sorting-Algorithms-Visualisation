@@ -1,5 +1,6 @@
 #include "program.hpp"
 #include "textbox.hpp"
+#include "button.hpp"
 #include <algorithm>
 #include <random>
 #include <iostream> //DEBUG
@@ -9,6 +10,7 @@ Program::Program()
     srand(time(0));
     SetTargetFPS(144);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+    elements.resize(numElements);
 }
 
 Program::~Program()
@@ -16,18 +18,9 @@ Program::~Program()
     CloseWindow();
 }
 
-void Program::resizeElementsVector(std::vector<Element> &elements)
+void Program::resizeElementsRect(std::vector<Element> &elements)
 {
     // TODO: Fix elements not showing if elements > 8155
-    if (numElements <= 0)
-        return;
-    elements.resize(numElements);
-    for (int i = 0; i < numElements; i++)
-    {
-        elements[i].val = i + 1;
-    }
-    elements = returnShuffled(elements);
-
     float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 16);
     for (int i = 0; i < numElements; i++)
     {
@@ -56,9 +49,13 @@ std::vector<Program::Element> Program::returnShuffled(const std::vector<Element>
 
 void Program::run()
 {
-    numElements = 5;
-    resizeElementsVector(elements);
-    Textbox textBox(WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f);
+    for (int i = 0; i < numElements; i++)
+    {
+        elements[i].val = i + 1;
+    }
+    resizeElementsRect(elements);
+    Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f});
+    Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f});
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -67,12 +64,25 @@ void Program::run()
         {
             DrawRectangleGradientEx(element.rect, GREEN, DARKGREEN, DARKGREEN, GREEN);
         }
+
         textBox.update();
         if (textBox.keyPressed() && atoi(textBox.getInput()) < 8155 && numElements != atoi(textBox.getInput()))
         {
             numElements = atoi(textBox.getInput());
-            resizeElementsVector(elements);
+            elements.resize(numElements);
+            for (int i = 0; i < numElements; i++)
+            {
+                elements[i].val = i + 1;
+            }
+            resizeElementsRect(elements);
         }
+        button.update();
+        if (button.btnPressed)
+        {
+            elements = returnShuffled(elements);
+            resizeElementsRect(elements);
+        }
+
         ClearBackground(Color({36, 36, 36}));
         EndDrawing();
     }

@@ -27,6 +27,6 @@ private:
 
     Sort currentSort;
 
-    void resizeElementsVector(std::vector<Element> &elements);
+    void resizeElementsRect(std::vector<Element> &elements);
     std::vector<Element> returnShuffled(const std::vector<Element> &elements);
 };
