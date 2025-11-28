@@ -1,5 +1,6 @@
 #pragma once
-#include "program.hpp"
+#include "raylib.h"
+#include "common.hpp"
 
 class Textbox
 {

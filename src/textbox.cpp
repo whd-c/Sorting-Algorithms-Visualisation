@@ -62,17 +62,17 @@ void Textbox::update()
         framesCounter = 0;
     DrawRectangleRec(rect, LIGHTGRAY);
     if (mouseOnText)
-        DrawRectangleLines((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height, RED);
+        DrawRectangleLines((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height, DARKBLUE);
     else
         DrawRectangleLines((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height, DARKGRAY);
 
-    DrawText(input, (int)rect.x + 5, (int)rect.y + 8, 40, MAROON);
+    DrawText(input, (int)rect.x + 5, (int)rect.y + 8, 40, BLUE);
     if (mouseOnText)
     {
         if (letterCount < MAX_INPUT)
         {
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)rect.x + 8 + MeasureText(input, 40), (int)rect.y + 12, 40, MAROON);
+                DrawText("_", (int)rect.x + 8 + MeasureText(input, 40), (int)rect.y + 12, 40, BLUE);
         }
     }
 }

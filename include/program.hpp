@@ -17,10 +17,16 @@ private:
 
     static constexpr float MAX_RECTANGLE_WIDTH = 225.0f;
     static constexpr float MAX_RECTANGLE_HEIGHT = 150.0f;
-    uint16_t elements = 5;
-    std::vector<Rectangle> rectangles{};
+    uint16_t numElements = 5;
+    struct Element
+    {
+        Rectangle rect;
+        int val = 0;
+    };
+    std::vector<Element> elements;
 
     Sort currentSort;
 
-    void resizeRectVector(std::vector<Rectangle> &rectangles);
+    void resizeElementsVector(std::vector<Element> &elements);
+    std::vector<Element> returnShuffled(const std::vector<Element> &elements);
 };
