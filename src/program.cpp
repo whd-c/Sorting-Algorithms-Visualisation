@@ -21,7 +21,7 @@ Program::~Program()
 void Program::resizeElementsRect(std::vector<Element> &elements)
 {
     // TODO: Fix elements not showing if elements > 8155
-    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 16);
+    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 12);
     for (int i = 0; i < numElements; i++)
     {
         const float height = MAX_RECTANGLE_HEIGHT * ((float)(elements[i].val) / numElements);
@@ -54,7 +54,8 @@ void Program::run()
         elements[i].val = i + 1;
     }
     resizeElementsRect(elements);
-    Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f});
+    const int MAX_INPUT = 5000;
+    Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
     Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f}, "SHUFFLE", 25);
     while (!WindowShouldClose())
     {
@@ -76,6 +77,9 @@ void Program::run()
             }
             resizeElementsRect(elements);
         }
+        char textBoxText[10];
+        snprintf(textBoxText, sizeof(textBoxText), "MAX: %d", MAX_INPUT);
+        DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.25f, 40, RAYWHITE);
         button.update();
         if (button.getBtnPressed())
         {

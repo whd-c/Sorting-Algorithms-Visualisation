@@ -26,13 +26,17 @@ void Textbox::update()
         int key = GetCharPressed();
         while (key > 0)
         {
-            if ((key >= 48) && (key <= 57) && (letterCount < MAX_INPUT))
+
+            if ((key >= 48) && (key <= 57) && (letterCount < MAX_INPUT_CHARS))
             {
                 input[letterCount] = (char)key;
                 input[letterCount + 1] = '\0';
                 letterCount++;
             }
-
+            if (std::atoi(input) > MAX_INPUT)
+            {
+                snprintf(input, sizeof(input), "%d", MAX_INPUT);
+            }
             key = GetCharPressed();
         }
 
@@ -61,7 +65,7 @@ void Textbox::update()
     DrawText(input, (int)rect.x + 5, (int)rect.y + 8, 40, BLUE);
     if (mouseOnText)
     {
-        if (letterCount < MAX_INPUT)
+        if (letterCount < MAX_INPUT_CHARS)
         {
             if (((framesCounter / 20) % 2) == 0)
                 DrawText("_", (int)rect.x + 8 + MeasureText(input, 40), (int)rect.y + 12, 40, BLUE);
