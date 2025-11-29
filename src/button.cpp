@@ -16,5 +16,10 @@ void Button::update()
     {
         btnState = 0;
     }
-    DrawRectangleRec(rect, RAYWHITE);
+    Color drawColor = (btnState == 2 ? cPress : btnState == 1 ? cHover
+                                                              : cNormal);
+    DrawRectangleRec(rect, drawColor);
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, fontSize, 1);
+    DrawTextEx(GetFontDefault(), text, {rect.x + (rect.width - textSize.x) / 2, rect.y + (rect.height - textSize.y) / 2}, fontSize, 1, BLACK);
 }

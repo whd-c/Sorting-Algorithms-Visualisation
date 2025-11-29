@@ -55,7 +55,7 @@ void Program::run()
     }
     resizeElementsRect(elements);
     Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f});
-    Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f});
+    Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f}, "SHUFFLE", 25);
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -77,7 +77,7 @@ void Program::run()
             resizeElementsRect(elements);
         }
         button.update();
-        if (button.btnPressed)
+        if (button.getBtnPressed())
         {
             elements = returnShuffled(elements);
             resizeElementsRect(elements);

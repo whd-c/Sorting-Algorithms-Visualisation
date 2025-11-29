@@ -5,12 +5,19 @@
 class Button
 {
 public:
-    Button(Rectangle _rect) : rect(_rect) {};
-    bool btnPressed = false;
+    Button(Rectangle _rect, const char *_text, uint8_t _fontSize) : rect(_rect), text(_text), fontSize(_fontSize) {};
+
     void update();
+    const bool getBtnPressed() const { return btnPressed; }
 
 private:
-    uint16_t width;
     Rectangle rect;
+    bool btnPressed = false;
+    const char *text = "PLACEHOLDER";
+    uint8_t fontSize;
     uint8_t btnState = 0; // 0 - normal, 1 - hovered, 2 - pressed
+
+    Color cNormal = Color{220, 220, 220, 255};
+    Color cHover = Color{245, 245, 245, 255};
+    Color cPress = Color{180, 180, 180, 255};
 };
