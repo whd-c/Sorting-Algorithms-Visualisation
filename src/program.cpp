@@ -21,11 +21,11 @@ Program::~Program()
 void Program::resizeElementsRect(std::vector<Element> &elements)
 {
     // TODO: Fix elements not showing if elements > 8155
-    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 12);
+    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 5.75f);
     for (int i = 0; i < numElements; i++)
     {
         const float height = MAX_RECTANGLE_HEIGHT * ((float)(elements[i].val) / numElements);
-        const float width = MAX_RECTANGLE_HEIGHT / numElements;
+        const float width = MAX_RECTANGLE_HEIGHT / numElements * 2;
         const float x = currentX;
         const float y = WINDOW_HEIGHT / 2.0f - height;
         elements[i].rect = {
@@ -56,8 +56,8 @@ void Program::run()
     resizeElementsRect(elements);
     constexpr int MAX_INPUT = 5000;
     constexpr int MIN_INPUT = 5;
-    Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
-    Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f}, "SHUFFLE", 25);
+    Textbox inputBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
+    Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.5f, 150.0f, 50.0f}, "SHUFFLE", 25);
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -67,10 +67,10 @@ void Program::run()
             DrawRectangleGradientEx(element.rect, GREEN, DARKGREEN, DARKGREEN, GREEN);
         }
 
-        textBox.update();
-        if (textBox.keyPressed() && numElements != std::atoi(textBox.getInput()))
+        inputBox.update();
+        if (inputBox.keyPressed() && numElements != std::atoi(inputBox.getInput()))
         {
-            numElements = (std::atoi(textBox.getInput()) > MIN_INPUT) ? (std::atoi(textBox.getInput())) : (MIN_INPUT);
+            numElements = (std::atoi(inputBox.getInput()) > MIN_INPUT) ? (std::atoi(inputBox.getInput())) : (MIN_INPUT);
             elements.resize(numElements);
             for (int i = 0; i < numElements; i++)
             {
@@ -83,8 +83,8 @@ void Program::run()
         DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.25f, 30, RAYWHITE);
         snprintf(textBoxText, sizeof(textBoxText), "MIN: %d", MIN_INPUT);
         DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.15f, 30, RAYWHITE);
-        button.update();
-        if (button.getBtnPressed())
+        shuffleButton.update();
+        if (shuffleButton.getBtnPressed())
         {
             elements = returnShuffled(elements);
             resizeElementsRect(elements);
