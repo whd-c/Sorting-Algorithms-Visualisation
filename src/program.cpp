@@ -54,7 +54,8 @@ void Program::run()
         elements[i].val = i + 1;
     }
     resizeElementsRect(elements);
-    const int MAX_INPUT = 5000;
+    constexpr int MAX_INPUT = 5000;
+    constexpr int MIN_INPUT = 5;
     Textbox textBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
     Button button({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f - 75.0f, 150.0f, 50.0f}, "SHUFFLE", 25);
     while (!WindowShouldClose())
@@ -67,9 +68,9 @@ void Program::run()
         }
 
         textBox.update();
-        if (textBox.keyPressed() && atoi(textBox.getInput()) < 8155 && numElements != atoi(textBox.getInput()))
+        if (textBox.keyPressed() && numElements != std::atoi(textBox.getInput()))
         {
-            numElements = atoi(textBox.getInput());
+            numElements = (std::atoi(textBox.getInput()) > MIN_INPUT) ? (std::atoi(textBox.getInput())) : (MIN_INPUT);
             elements.resize(numElements);
             for (int i = 0; i < numElements; i++)
             {
@@ -79,7 +80,9 @@ void Program::run()
         }
         char textBoxText[10];
         snprintf(textBoxText, sizeof(textBoxText), "MAX: %d", MAX_INPUT);
-        DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.25f, 40, RAYWHITE);
+        DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.25f, 30, RAYWHITE);
+        snprintf(textBoxText, sizeof(textBoxText), "MIN: %d", MIN_INPUT);
+        DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.15f, 30, RAYWHITE);
         button.update();
         if (button.getBtnPressed())
         {

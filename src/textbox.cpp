@@ -42,7 +42,6 @@ void Textbox::update()
 
         if (IsKeyPressed(KEY_BACKSPACE))
         {
-
             letterCount--;
             if (letterCount < 0)
                 letterCount = 0;

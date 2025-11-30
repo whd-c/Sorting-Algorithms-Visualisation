@@ -6,7 +6,7 @@
 class Textbox
 {
 public:
-    Textbox(Rectangle _rect,  uint16_t _MAX_INPUT) : rect(_rect), MAX_INPUT(_MAX_INPUT) {};
+    Textbox(Rectangle _rect, uint16_t _MAX_INPUT) : rect(_rect), MAX_INPUT(_MAX_INPUT) {};
     void update();
     bool keyPressed();
 
