@@ -90,7 +90,7 @@ void Program::run()
             resizeElementsRect(elements);
         }
 
-        ClearBackground(Color({36, 36, 36}));
+        ClearBackground(Color({36, 36, 36, 255}));
         EndDrawing();
     }
 }

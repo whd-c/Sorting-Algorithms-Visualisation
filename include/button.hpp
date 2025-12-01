@@ -8,7 +8,7 @@ public:
     Button(Rectangle _rect, const char *_text, uint8_t _fontSize) : rect(_rect), text(_text), fontSize(_fontSize) {};
 
     void update();
-    const bool getBtnPressed() const { return btnPressed; }
+    bool getBtnPressed() const { return btnPressed; }
 
 private:
     Rectangle rect;

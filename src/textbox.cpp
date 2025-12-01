@@ -6,7 +6,7 @@ bool Textbox::keyPressed()
     bool keyPressed = false;
     int key = GetKeyPressed();
 
-    if ((key >= 48) && (key <= 57) || IsKeyPressed(KEY_BACKSPACE))
+    if (((key >= 48) && (key <= 57)) || IsKeyPressed(KEY_BACKSPACE))
         keyPressed = true;
 
     return keyPressed;
@@ -40,11 +40,9 @@ void Textbox::update()
             key = GetCharPressed();
         }
 
-        if (IsKeyPressed(KEY_BACKSPACE))
+        if (IsKeyPressed(KEY_BACKSPACE) && letterCount > 0)
         {
             letterCount--;
-            if (letterCount < 0)
-                letterCount = 0;
             input[letterCount] = '\0';
         }
     }
