@@ -23,6 +23,7 @@ set(SOURCE_FILES
     src/textbox.cpp
     src/button.cpp
     src/sort_manager.cpp
+    src/render.cpp
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE

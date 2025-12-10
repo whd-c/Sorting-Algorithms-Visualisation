@@ -1,6 +1,6 @@
 #include "program.hpp"
-#include "textbox.hpp"
-#include "button.hpp"
+#include "ui/textbox.hpp"
+#include "ui/button.hpp"
 #include <iostream> //DEBUG
 
 Program::Program()
@@ -16,33 +16,13 @@ Program::~Program()
     CloseWindow();
 }
 
-void Program::resizeElementsRect(std::vector<Element> &elements)
-{
-    // TODO: Fix elements not showing if elements > 8155
-    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 5.75f);
-    for (int i = 0; i < sortManager.numElements; i++)
-    {
-        const float height = MAX_RECTANGLE_HEIGHT * ((float)(elements[i].val) / sortManager.numElements);
-        const float width = MAX_RECTANGLE_HEIGHT / sortManager.numElements * 2;
-        const float x = currentX;
-        const float y = WINDOW_HEIGHT / 2.0f - height;
-        elements[i].rect = {
-            x,
-            y,
-            width,
-            height,
-        };
-        currentX += width;
-    }
-}
-
 void Program::run()
 {
     for (int i = 0; i < sortManager.numElements; i++)
     {
         sortManager.elements[i].val = i + 1;
     }
-    resizeElementsRect(sortManager.elements);
+    render.resizeElementsRect(sortManager.elements);
     constexpr int MAX_INPUT = 5000;
     constexpr int MIN_INPUT = 5;
     Textbox inputBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
@@ -65,7 +45,7 @@ void Program::run()
             {
                 sortManager.elements[i].val = i + 1;
             }
-            resizeElementsRect(sortManager.elements);
+            render.resizeElementsRect(sortManager.elements);
         }
         char textBoxText[10];
         snprintf(textBoxText, sizeof(textBoxText), "MAX: %d", MAX_INPUT);
@@ -76,7 +56,7 @@ void Program::run()
         if (shuffleButton.getBtnPressed())
         {
             sortManager.elements = sortManager.returnShuffled(sortManager.elements);
-            resizeElementsRect(sortManager.elements);
+            render.resizeElementsRect(sortManager.elements);
         }
 
         ClearBackground(Color({36, 36, 36, 255}));
