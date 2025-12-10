@@ -2,7 +2,15 @@
 
 int main()
 {
-    Program program;
-    program.run();
+    try
+    {
+        Program program;
+        program.run();
+    }
+    catch (...)
+    {
+        return EXIT_FAILURE;
+    }
+
     return 0;
 }
