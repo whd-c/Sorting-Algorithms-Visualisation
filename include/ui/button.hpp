@@ -9,6 +9,7 @@ public:
 
     void update();
     bool getBtnPressed() const { return btnPressed; }
+    void setText(const char *_text) { text = _text; }
 
 private:
     Rectangle rect;

@@ -25,11 +25,11 @@ void Program::run()
     render.resizeElementsRect(sortManager.elements);
     constexpr int MAX_INPUT = 5000;
     constexpr int MIN_INPUT = 5;
-    Textbox inputBox({WINDOW_WIDTH / 2.0f - 100.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
-    Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 2.0f, 150.0f, 50.0f}, "SHUFFLE", 25);
-    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.5f, 150.0f, 50.0f}, "BUBBLE SORT", 20);
-    Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.5f, 150.0f, 50.0f}, "RUN SORT", 25);
-    Button stopSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.2f, 150.0f, 50.0f}, "STOP SORT", 25);
+    Textbox inputBox({WINDOW_WIDTH / 2.0f - 120.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
+    Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "SHUFFLE", 25);
+    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "BUBBLE", 20);
+    Button selectionSortButton({50, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "SELECTION", 20);
+    Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
     while (!WindowShouldClose())
     {
@@ -66,7 +66,7 @@ void Program::run()
         shuffleButton.update();
         bubbleSortButton.update();
         runSortButton.update();
-        stopSortButton.update();
+        selectionSortButton.update();
 
         if (shuffleButton.getBtnPressed())
         {
@@ -74,17 +74,19 @@ void Program::run()
             render.resizeElementsRect(sortManager.elements);
             sorting = false;
         }
-        if (bubbleSortButton.getBtnPressed())
+        if (bubbleSortButton.getBtnPressed() && sortManager.currentSort != Sort::BUBBLE_SORT)
         {
             sortManager.currentSort = Sort::BUBBLE_SORT;
+            sorting = false;
+        }
+        if (selectionSortButton.getBtnPressed() && sortManager.currentSort != Sort::SELECTION_SORT)
+        {
+            sortManager.currentSort = Sort::SELECTION_SORT;
+            sorting = false;
         }
         if (runSortButton.getBtnPressed())
         {
-            sorting = true;
-        }
-        if (stopSortButton.getBtnPressed())
-        {
-            sorting = false;
+            sorting = !sorting;
         }
 
         if (sorting)
@@ -95,7 +97,13 @@ void Program::run()
                 sorting = false;
             }
             sortManager.update();
+            runSortButton.setText("STOP SORT");
             render.resizeElementsRect(sortManager.elements);
+        }
+        else
+        {
+            runSortButton.setText("RUN SORT");
+            sortManager.iterations = 0;
         }
 
         ClearBackground(Color({36, 36, 36, 255}));
