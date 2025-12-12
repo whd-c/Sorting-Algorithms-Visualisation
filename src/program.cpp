@@ -27,8 +27,9 @@ void Program::run()
     constexpr int MIN_INPUT = 5;
     Textbox inputBox({WINDOW_WIDTH / 2.0f - 120.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
     Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "SHUFFLE", 25);
-    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "BUBBLE", 20);
-    Button selectionSortButton({50, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "SELECTION", 20);
+    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.85f, 150.0f, 50.0f}, "BUBBLE", 20);
+    Button selectionSortButton({50.0f, WINDOW_HEIGHT / 1.45f, 150.0f, 50.0f}, "SELECTION", 20);
+    Button insertionSortButton({50.0f, WINDOW_HEIGHT / 1.2f, 150.0f, 50.0f}, "INSERTION", 20);
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
     while (!WindowShouldClose())
@@ -67,6 +68,7 @@ void Program::run()
         bubbleSortButton.update();
         runSortButton.update();
         selectionSortButton.update();
+        insertionSortButton.update();
 
         if (shuffleButton.getBtnPressed())
         {
@@ -82,6 +84,11 @@ void Program::run()
         if (selectionSortButton.getBtnPressed() && sortManager.currentSort != Sort::SELECTION_SORT)
         {
             sortManager.currentSort = Sort::SELECTION_SORT;
+            sorting = false;
+        }
+        if (insertionSortButton.getBtnPressed() && sortManager.currentSort != Sort::INSERTION_SORT)
+        {
+            sortManager.currentSort = Sort::INSERTION_SORT;
             sorting = false;
         }
         if (runSortButton.getBtnPressed())

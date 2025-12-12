@@ -20,4 +20,5 @@ public:
 private:
     std::vector<Element> bubbleSort(const std::vector<Element> &elements);
     std::vector<Element> selectionSort(const std::vector<Element> &elements);
+    std::vector<Element> insertionSort(const std::vector<Element> &elements);
 };

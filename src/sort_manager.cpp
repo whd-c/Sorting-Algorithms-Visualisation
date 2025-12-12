@@ -21,6 +21,7 @@ void SortManager::update()
         elements = selectionSort(elements);
         break;
     case Sort::INSERTION_SORT:
+        elements = insertionSort(elements);
         break;
     default:
         break;
@@ -57,6 +58,25 @@ std::vector<Element> SortManager::selectionSort(const std::vector<Element> &elem
     std::swap(sorted[iterations].val, sorted[min_index].val);
     sorted[iterations].selected = true;
     sorted[min_index].selected = true;
+    iterations++;
+    return sorted;
+}
+
+std::vector<Element> SortManager::insertionSort(const std::vector<Element> &elements)
+{
+    std::vector<Element> sorted{elements};
+    if (iterations >= sorted.size() - 1)
+        return sorted;
+    Element key = sorted[iterations + 1];
+    int i = iterations;
+    while (i >= 0 && sorted[i].val > key.val)
+    {
+        sorted[i + 1].val = sorted[i].val;
+        i--;
+    }
+    sorted[i + 1] = key;
+    sorted[i + 1].selected = true;
+    key.selected = true;
     iterations++;
     return sorted;
 }
