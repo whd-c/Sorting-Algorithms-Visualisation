@@ -13,7 +13,10 @@ struct Element
 {
     Rectangle rect;
     int val = 0;
+    bool selected = false;
 };
 
 constexpr uint16_t WINDOW_WIDTH = 800;
 constexpr uint16_t WINDOW_HEIGHT = 450;
+
+constexpr Color DARKRED = {55, 0, 0, 255};

@@ -16,5 +16,6 @@ private:
     static constexpr const char *WINDOW_TITLE = "Sorting Algorithms Visualisation";
 
     SortManager sortManager;
+    bool sorting = false;
     Render render{sortManager};
 };
