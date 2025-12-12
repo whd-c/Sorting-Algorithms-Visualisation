@@ -2,6 +2,7 @@
 #include "ui/textbox.hpp"
 #include "ui/button.hpp"
 #include <iostream> //DEBUG
+#include <chrono>
 
 Program::Program()
 {
@@ -32,8 +33,12 @@ void Program::run()
     Button insertionSortButton({50.0f, WINDOW_HEIGHT / 1.2f, 150.0f, 50.0f}, "INSERTION", 20);
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
+    auto beg = std::chrono::high_resolution_clock::now();
+    auto end = beg;
     while (!WindowShouldClose())
     {
+
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - beg);
         BeginDrawing();
         DrawText("Sorting Algorithms Visualisation", 10, 10, 32, RAYWHITE);
         for (auto &element : sortManager.elements)
@@ -64,6 +69,9 @@ void Program::run()
         DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.25f, 30, RAYWHITE);
         snprintf(textBoxText, sizeof(textBoxText), "MIN: %d", MIN_INPUT);
         DrawText(textBoxText, WINDOW_WIDTH / 2 - 90.0f, WINDOW_HEIGHT / 1.15f, 30, RAYWHITE);
+        DrawText("ELAPSED: ", WINDOW_WIDTH / 1.3f, 30, 20, RAYWHITE);
+        snprintf(textBoxText, sizeof(textBoxText), "%lld ms", duration.count());
+        DrawText(textBoxText, WINDOW_WIDTH / 1.3f, 60, 20, RAYWHITE);
         shuffleButton.update();
         bubbleSortButton.update();
         runSortButton.update();
@@ -94,6 +102,11 @@ void Program::run()
         if (runSortButton.getBtnPressed())
         {
             sorting = !sorting;
+            if (sorting)
+            {
+                beg = std::chrono::high_resolution_clock::now();
+                end = beg;
+            }
         }
 
         if (sorting)
@@ -106,6 +119,7 @@ void Program::run()
             sortManager.update();
             runSortButton.setText("STOP SORT");
             render.resizeElementsRect(sortManager.elements);
+            end = std::chrono::high_resolution_clock::now();
         }
         else
         {

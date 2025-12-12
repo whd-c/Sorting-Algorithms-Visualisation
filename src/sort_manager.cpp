@@ -31,7 +31,7 @@ void SortManager::update()
 std::vector<Element> SortManager::bubbleSort(const std::vector<Element> &elements)
 {
     std::vector<Element> sorted{elements};
-    for (size_t i = 0; i < sorted.size() - 1 - iterations; i++)
+    for (int i = 0; i < numElements - 1 - iterations; i++)
     {
         if (sorted[i].val > sorted[i + 1].val)
         {
@@ -47,7 +47,7 @@ std::vector<Element> SortManager::selectionSort(const std::vector<Element> &elem
 {
     std::vector<Element> sorted{elements};
     int min_index = iterations;
-    for (size_t i = min_index + 1; i < sorted.size(); i++)
+    for (int i = min_index + 1; i < numElements; i++)
     {
         if (sorted[i].val < sorted[min_index].val)
         {
@@ -65,7 +65,7 @@ std::vector<Element> SortManager::selectionSort(const std::vector<Element> &elem
 std::vector<Element> SortManager::insertionSort(const std::vector<Element> &elements)
 {
     std::vector<Element> sorted{elements};
-    if (iterations >= sorted.size() - 1)
+    if (iterations >= numElements - 1)
         return sorted;
     Element key = sorted[iterations + 1];
     int i = iterations;
