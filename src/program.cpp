@@ -28,6 +28,7 @@ void Program::run()
     constexpr int MIN_INPUT = 5;
     Textbox inputBox({WINDOW_WIDTH / 2.0f - 120.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
     Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "SHUFFLE", 25);
+    Button pancakeSortButton({50.0f, WINDOW_HEIGHT / 2.6f, 150.0f, 50.0f}, "PANCAKE", 20);
     Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.85f, 150.0f, 50.0f}, "BUBBLE", 20);
     Button selectionSortButton({50.0f, WINDOW_HEIGHT / 1.45f, 150.0f, 50.0f}, "SELECTION", 20);
     Button insertionSortButton({50.0f, WINDOW_HEIGHT / 1.2f, 150.0f, 50.0f}, "INSERTION", 20);
@@ -56,6 +57,8 @@ void Program::run()
         inputBox.update();
         if (inputBox.keyPressed() && sortManager.numElements != std::atoi(inputBox.getInput()))
         {
+            sorting = false;
+            sortManager.iterations = 0;
             sortManager.numElements = (std::atoi(inputBox.getInput()) > MIN_INPUT) ? (std::atoi(inputBox.getInput())) : (MIN_INPUT);
             sortManager.elements.resize(sortManager.numElements);
             for (int i = 0; i < sortManager.numElements; i++)
@@ -77,27 +80,38 @@ void Program::run()
         runSortButton.update();
         selectionSortButton.update();
         insertionSortButton.update();
+        pancakeSortButton.update();
 
         if (shuffleButton.getBtnPressed())
         {
             sortManager.elements = sortManager.returnShuffled(sortManager.elements);
             render.resizeElementsRect(sortManager.elements);
             sorting = false;
+            sortManager.iterations = 0;
+        }
+        if (pancakeSortButton.getBtnPressed() && sortManager.currentSort != Sort::PANCAKE_SORT)
+        {
+            sortManager.currentSort = Sort::PANCAKE_SORT;
+            sorting = false;
+            sortManager.iterations = 0;
         }
         if (bubbleSortButton.getBtnPressed() && sortManager.currentSort != Sort::BUBBLE_SORT)
         {
             sortManager.currentSort = Sort::BUBBLE_SORT;
             sorting = false;
+            sortManager.iterations = 0;
         }
         if (selectionSortButton.getBtnPressed() && sortManager.currentSort != Sort::SELECTION_SORT)
         {
             sortManager.currentSort = Sort::SELECTION_SORT;
             sorting = false;
+            sortManager.iterations = 0;
         }
         if (insertionSortButton.getBtnPressed() && sortManager.currentSort != Sort::INSERTION_SORT)
         {
             sortManager.currentSort = Sort::INSERTION_SORT;
             sorting = false;
+            sortManager.iterations = 0;
         }
         if (runSortButton.getBtnPressed())
         {
@@ -111,10 +125,11 @@ void Program::run()
 
         if (sorting)
         {
-            if (std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
-                               { return a.val < b.val; }))
+            if (sortManager.iterations >= sortManager.numElements - 1 && std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
+                                                                                        { return a.val < b.val; }))
             {
                 sorting = false;
+                sortManager.iterations = 0;
             }
             sortManager.update();
             runSortButton.setText("STOP SORT");
@@ -124,7 +139,6 @@ void Program::run()
         else
         {
             runSortButton.setText("RUN SORT");
-            sortManager.iterations = 0;
         }
 
         ClearBackground(Color({36, 36, 36, 255}));

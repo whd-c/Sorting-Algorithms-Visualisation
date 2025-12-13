@@ -7,6 +7,7 @@ enum class Sort
     BUBBLE_SORT,
     SELECTION_SORT,
     INSERTION_SORT,
+    PANCAKE_SORT,
 };
 
 struct Element

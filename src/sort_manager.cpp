@@ -23,6 +23,9 @@ void SortManager::update()
     case Sort::INSERTION_SORT:
         elements = insertionSort(elements);
         break;
+    case Sort::PANCAKE_SORT:
+        elements = pancakeSort(elements);
+        break;
     default:
         break;
     }
@@ -35,10 +38,10 @@ std::vector<Element> SortManager::bubbleSort(const std::vector<Element> &element
     {
         if (sorted[i].val > sorted[i + 1].val)
         {
-            sorted[i].selected = true;
             std::swap(sorted[i].val, sorted[i + 1].val);
         }
     }
+    sorted[numElements - 1 - iterations].selected = true;
     iterations++;
     return sorted;
 }
@@ -77,6 +80,34 @@ std::vector<Element> SortManager::insertionSort(const std::vector<Element> &elem
     sorted[i + 1] = key;
     sorted[i + 1].selected = true;
     key.selected = true;
+    iterations++;
+    return sorted;
+}
+
+std::vector<Element> SortManager::pancakeSort(const std::vector<Element> &elements)
+{
+    std::vector<Element> sorted{elements};
+    int currSize = numElements - iterations;
+
+    if (currSize <= 1)
+        return sorted;
+
+    auto maxIt = std::max_element(
+        sorted.begin(),
+        sorted.begin() + currSize,
+        [](const Element &a, const Element &b)
+        {
+            return a.val < b.val;
+        });
+    int maxIndex = std::distance(sorted.begin(), maxIt);
+
+    if (maxIndex != currSize - 1)
+    {
+        std::reverse(sorted.begin(), sorted.begin() + maxIndex + 1);
+        std::reverse(sorted.begin(), sorted.begin() + currSize);
+    }
+
+    sorted[currSize - 1].selected = true;
     iterations++;
     return sorted;
 }
