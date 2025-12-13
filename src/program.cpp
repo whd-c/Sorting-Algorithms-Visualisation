@@ -1,8 +1,5 @@
 #include "program.hpp"
-#include "ui/textbox.hpp"
-#include "ui/button.hpp"
 #include <iostream> //DEBUG
-#include <chrono>
 
 Program::Program()
 {
@@ -35,11 +32,16 @@ void Program::run()
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
     auto beg = std::chrono::high_resolution_clock::now();
-    auto end = beg;
+
     while (!WindowShouldClose())
     {
 
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - beg);
+        auto duration = accumulatedTime;
+        if (timerRunning)
+        {
+            duration += std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now() - beg);
+        }
         BeginDrawing();
         DrawText("Sorting Algorithms Visualisation", 10, 10, 32, RAYWHITE);
         for (auto &element : sortManager.elements)
@@ -57,8 +59,7 @@ void Program::run()
         inputBox.update();
         if (inputBox.keyPressed() && sortManager.numElements != std::atoi(inputBox.getInput()))
         {
-            sorting = false;
-            sortManager.iterations = 0;
+            resetState();
             sortManager.numElements = (std::atoi(inputBox.getInput()) > MIN_INPUT) ? (std::atoi(inputBox.getInput())) : (MIN_INPUT);
             sortManager.elements.resize(sortManager.numElements);
             for (int i = 0; i < sortManager.numElements; i++)
@@ -86,40 +87,31 @@ void Program::run()
         {
             sortManager.elements = sortManager.returnShuffled(sortManager.elements);
             render.resizeElementsRect(sortManager.elements);
-            sorting = false;
-            sortManager.iterations = 0;
+            resetState();
         }
-        if (pancakeSortButton.getBtnPressed() && sortManager.currentSort != Sort::PANCAKE_SORT)
-        {
-            sortManager.currentSort = Sort::PANCAKE_SORT;
-            sorting = false;
-            sortManager.iterations = 0;
-        }
-        if (bubbleSortButton.getBtnPressed() && sortManager.currentSort != Sort::BUBBLE_SORT)
-        {
-            sortManager.currentSort = Sort::BUBBLE_SORT;
-            sorting = false;
-            sortManager.iterations = 0;
-        }
-        if (selectionSortButton.getBtnPressed() && sortManager.currentSort != Sort::SELECTION_SORT)
-        {
-            sortManager.currentSort = Sort::SELECTION_SORT;
-            sorting = false;
-            sortManager.iterations = 0;
-        }
-        if (insertionSortButton.getBtnPressed() && sortManager.currentSort != Sort::INSERTION_SORT)
-        {
-            sortManager.currentSort = Sort::INSERTION_SORT;
-            sorting = false;
-            sortManager.iterations = 0;
-        }
+        onSortButtonPress(pancakeSortButton, Sort::PANCAKE_SORT);
+        onSortButtonPress(bubbleSortButton, Sort::BUBBLE_SORT);
+        onSortButtonPress(selectionSortButton, Sort::SELECTION_SORT);
+        onSortButtonPress(insertionSortButton, Sort::INSERTION_SORT);
         if (runSortButton.getBtnPressed())
         {
             sorting = !sorting;
             if (sorting)
             {
+                if (sortManager.iterations >= sortManager.numElements - 1 && std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
+                                                                                            { return a.val < b.val; }))
+                {
+                    sortManager.iterations = 0;
+                    accumulatedTime = std::chrono::milliseconds(0);
+                }
                 beg = std::chrono::high_resolution_clock::now();
-                end = beg;
+                timerRunning = true;
+            }
+            else
+            {
+                accumulatedTime += std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::high_resolution_clock::now() - beg);
+                timerRunning = false;
             }
         }
 
@@ -128,13 +120,15 @@ void Program::run()
             if (sortManager.iterations >= sortManager.numElements - 1 && std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
                                                                                         { return a.val < b.val; }))
             {
+                accumulatedTime += std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::high_resolution_clock::now() - beg);
                 sorting = false;
-                sortManager.iterations = 0;
+
+                timerRunning = false;
             }
             sortManager.update();
             runSortButton.setText("STOP SORT");
             render.resizeElementsRect(sortManager.elements);
-            end = std::chrono::high_resolution_clock::now();
         }
         else
         {
@@ -144,4 +138,21 @@ void Program::run()
         ClearBackground(Color({36, 36, 36, 255}));
         EndDrawing();
     }
+}
+
+void Program::onSortButtonPress(const Button &button, Sort sortType)
+{
+    if (button.getBtnPressed() && sortManager.currentSort != sortType)
+    {
+        sortManager.currentSort = sortType;
+        resetState();
+    }
+}
+
+void Program::resetState()
+{
+    sorting = false;
+    sortManager.iterations = 0;
+    timerRunning = false;
+    accumulatedTime = std::chrono::milliseconds(0);
 }
