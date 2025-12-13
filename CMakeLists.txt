@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(SAV C CXX)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
@@ -26,15 +28,30 @@ set(SOURCE_FILES
     src/render.cpp
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-target_compile_options(${PROJECT_NAME} PRIVATE
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")  
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MTd")      
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+else()
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mwindows")
+    target_compile_options(${PROJECT_NAME} PRIVATE
     -Wall        
     -Wextra
-    -Werror      
+    -Werror   
+)
+endif()
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     ${RAYLIB_PLATFORM_DEFINITIONS}
 )
+
+file(COPY 
+    ${CMAKE_SOURCE_DIR}/deps/
+    DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    FILES_MATCHING PATTERN "*.dll"
+)
+
+
