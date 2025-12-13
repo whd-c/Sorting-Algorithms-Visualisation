@@ -4,8 +4,12 @@
 Program::Program()
 {
     srand(time(0));
-    SetTargetFPS(144);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+    if (GetWindowHandle() == nullptr)
+    {
+        throw std::runtime_error("Failed to create window!");
+    }
+    SetTargetFPS(144);
     sortManager.elements.resize(sortManager.numElements);
 }
 
