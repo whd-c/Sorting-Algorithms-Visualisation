@@ -29,10 +29,11 @@ void Program::run()
     constexpr int MIN_INPUT = 5;
     Textbox inputBox({WINDOW_WIDTH / 2.0f - 120.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
     Button shuffleButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.75f, 150.0f, 50.0f}, "SHUFFLE", 25);
-    Button pancakeSortButton({50.0f, WINDOW_HEIGHT / 2.6f, 150.0f, 50.0f}, "PANCAKE", 20);
-    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 1.85f, 150.0f, 50.0f}, "BUBBLE", 20);
-    Button selectionSortButton({50.0f, WINDOW_HEIGHT / 1.45f, 150.0f, 50.0f}, "SELECTION", 20);
-    Button insertionSortButton({50.0f, WINDOW_HEIGHT / 1.2f, 150.0f, 50.0f}, "INSERTION", 20);
+    Button mergeSortButton({50.0f, WINDOW_HEIGHT / 6.0f, 150.0f, 50.0f}, "MERGE", 20);
+    Button pancakeSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 75.0f, 150.0f, 50.0f}, "PANCAKE", 20);
+    Button bubbleSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 150.0f, 150.0f, 50.0f}, "BUBBLE", 20);
+    Button selectionSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 225.0f, 150.0f, 50.0f}, "SELECTION", 20);
+    Button insertionSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 300.0f, 150.0f, 50.0f}, "INSERTION", 20);
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
     auto beg = std::chrono::high_resolution_clock::now();
@@ -81,6 +82,7 @@ void Program::run()
         snprintf(textBoxText, sizeof(textBoxText), "%lld ms", duration.count());
         DrawText(textBoxText, WINDOW_WIDTH / 1.3f, 60, 20, RAYWHITE);
         shuffleButton.update();
+        mergeSortButton.update();
         bubbleSortButton.update();
         runSortButton.update();
         selectionSortButton.update();
@@ -93,6 +95,7 @@ void Program::run()
             render.resizeElementsRect(sortManager.elements);
             resetState();
         }
+        onSortButtonPress(mergeSortButton, Sort::MERGE_SORT);
         onSortButtonPress(pancakeSortButton, Sort::PANCAKE_SORT);
         onSortButtonPress(bubbleSortButton, Sort::BUBBLE_SORT);
         onSortButtonPress(selectionSortButton, Sort::SELECTION_SORT);
@@ -121,8 +124,8 @@ void Program::run()
 
         if (sorting)
         {
-            if (sortManager.iterations >= sortManager.numElements - 1 && std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
-                                                                                        { return a.val < b.val; }))
+            if (std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
+                               { return a.val < b.val; }))
             {
                 accumulatedTime += std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - beg);

@@ -8,6 +8,7 @@ enum class Sort
     SELECTION_SORT,
     INSERTION_SORT,
     PANCAKE_SORT,
+    MERGE_SORT,
 };
 
 struct Element

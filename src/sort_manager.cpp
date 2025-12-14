@@ -26,6 +26,9 @@ void SortManager::update()
     case Sort::PANCAKE_SORT:
         elements = pancakeSort(elements);
         break;
+    case Sort::MERGE_SORT:
+        elements = mergeSort(elements);
+        break;
     default:
         break;
     }
@@ -108,6 +111,67 @@ std::vector<Element> SortManager::pancakeSort(const std::vector<Element> &elemen
     }
 
     sorted[currSize - 1].selected = true;
+    iterations++;
+    return sorted;
+}
+
+std::vector<Element> SortManager::mergeSort(const std::vector<Element> &elements)
+{
+    std::vector<Element> sorted{elements};
+    int currSize = std::pow(2, iterations);
+    if (currSize > numElements - 1)
+        return sorted;
+    std::vector<Element> mergeSortArr1(numElements);
+    std::vector<Element> mergeSortArr2(numElements);
+
+    for (int leftStart = 0; leftStart < numElements - 1; leftStart += 2 * currSize)
+    {
+        int mid = std::min(leftStart + currSize - 1, numElements - 1);
+        int rightEnd = std::min(leftStart + 2 * currSize - 1, numElements - 1);
+        int n1 = mid - leftStart + 1;
+        int n2 = rightEnd - mid;
+
+        for (int i = 0; i < n1; i++)
+        {
+            mergeSortArr1[i] = sorted[leftStart + i];
+        }
+        for (int i = 0; i < n2; i++)
+        {
+            mergeSortArr2[i] = sorted[mid + 1 + i];
+        }
+        int i = 0;
+        int j = 0;
+        int k = leftStart;
+
+        while (i < n1 && j < n2)
+        {
+            if (mergeSortArr1[i].val <= mergeSortArr2[j].val)
+            {
+                sorted[k] = mergeSortArr1[i];
+                i++;
+            }
+            else
+            {
+                sorted[k] = mergeSortArr2[j];
+                j++;
+            }
+            k++;
+        }
+        while (i < n1)
+        {
+            sorted[k] = mergeSortArr1[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2)
+        {
+            sorted[k] = mergeSortArr2[j];
+            j++;
+            k++;
+        }
+        sorted[mid].selected = true;
+    }
     iterations++;
     return sorted;
 }

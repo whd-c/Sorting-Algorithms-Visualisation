@@ -22,4 +22,5 @@ private:
     std::vector<Element> selectionSort(const std::vector<Element> &elements);
     std::vector<Element> insertionSort(const std::vector<Element> &elements);
     std::vector<Element> pancakeSort(const std::vector<Element> &elements);
+    std::vector<Element> mergeSort(const std::vector<Element> &elements);
 };
