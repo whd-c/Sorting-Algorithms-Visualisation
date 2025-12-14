@@ -10,6 +10,13 @@ Program::Program()
         throw std::runtime_error("Failed to create window!");
     }
     SetTargetFPS(144);
+    Image icon = LoadImage("icon/icon.png");
+    if (icon.data == nullptr)
+    {
+        throw std::runtime_error("Failed to load icon.png!");
+    }
+    SetWindowIcon(icon);
+    UnloadImage(icon);
     sortManager.elements.resize(sortManager.numElements);
 }
 

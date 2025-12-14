@@ -26,6 +26,7 @@ set(SOURCE_FILES
     src/button.cpp
     src/sort_manager.cpp
     src/render.cpp
+    icon/resource.rc
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 if(MSVC)
@@ -55,4 +56,10 @@ if(WIN32)
         FILES_MATCHING PATTERN "*.dll"
     )
 endif()
+
+file(COPY 
+    ${CMAKE_SOURCE_DIR}/icon/
+    DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/icon
+    FILES_MATCHING PATTERN "*.png"
+)
 
