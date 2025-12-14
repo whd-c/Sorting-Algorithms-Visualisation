@@ -48,10 +48,11 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     ${RAYLIB_PLATFORM_DEFINITIONS}
 )
 
-file(COPY 
-    ${CMAKE_SOURCE_DIR}/deps/
-    DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-    FILES_MATCHING PATTERN "*.dll"
-)
-
+if(WIN32)
+    file(COPY 
+        ${CMAKE_SOURCE_DIR}/deps/
+        DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        FILES_MATCHING PATTERN "*.dll"
+    )
+endif()
 
