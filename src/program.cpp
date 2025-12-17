@@ -31,7 +31,7 @@ void Program::run()
     {
         sortManager.elements[i].val = i + 1;
     }
-    render.resizeElementsRect(sortManager.elements);
+    sortManager.resizeElementsRect();
     constexpr int MAX_INPUT = 5000;
     constexpr int MIN_INPUT = 5;
     Textbox inputBox({WINDOW_WIDTH / 2.0f - 120.f, WINDOW_HEIGHT / 1.5f, 225.0f, 50.0f}, MAX_INPUT);
@@ -44,6 +44,8 @@ void Program::run()
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
 
     auto beg = std::chrono::high_resolution_clock::now();
+    selectedSortBtn = bubbleSortButton;
+    selectedSortBtn->get().setSelected();
 
     while (!WindowShouldClose())
     {
@@ -78,7 +80,7 @@ void Program::run()
             {
                 sortManager.elements[i].val = i + 1;
             }
-            render.resizeElementsRect(sortManager.elements);
+            sortManager.resizeElementsRect();
         }
         char textBoxText[10];
         snprintf(textBoxText, sizeof(textBoxText), "MAX: %d", MAX_INPUT);
@@ -99,7 +101,7 @@ void Program::run()
         if (shuffleButton.getBtnPressed())
         {
             sortManager.elements = sortManager.returnShuffled(sortManager.elements);
-            render.resizeElementsRect(sortManager.elements);
+            sortManager.resizeElementsRect();
             resetState();
         }
         onSortButtonPress(mergeSortButton, Sort::MERGE_SORT);
@@ -109,8 +111,8 @@ void Program::run()
         onSortButtonPress(insertionSortButton, Sort::INSERTION_SORT);
         if (runSortButton.getBtnPressed())
         {
-            sorting = !sorting;
-            if (sorting)
+            sortManager.sorting = !sortManager.sorting;
+            if (sortManager.sorting)
             {
                 if (sortManager.iterations >= sortManager.numElements - 1 && std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
                                                                                             { return a.val < b.val; }))
@@ -129,20 +131,20 @@ void Program::run()
             }
         }
 
-        if (sorting)
+        if (sortManager.sorting)
         {
             if (std::is_sorted(sortManager.elements.begin(), sortManager.elements.end(), [](const Element &a, const Element &b)
                                { return a.val < b.val; }))
             {
                 accumulatedTime += std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - beg);
-                sorting = false;
+                sortManager.sorting = false;
 
                 timerRunning = false;
             }
             sortManager.update();
             runSortButton.setText("STOP SORT");
-            render.resizeElementsRect(sortManager.elements);
+            sortManager.resizeElementsRect();
         }
         else
         {
@@ -154,18 +156,24 @@ void Program::run()
     }
 }
 
-void Program::onSortButtonPress(const Button &button, Sort sortType)
+void Program::onSortButtonPress(Button &button, Sort sortType)
 {
     if (button.getBtnPressed() && sortManager.currentSort != sortType)
     {
+        if (selectedSortBtn)
+        {
+            selectedSortBtn->get().setSelected(false);
+        }
         sortManager.currentSort = sortType;
+        button.setSelected();
+        selectedSortBtn = button;
         resetState();
     }
 }
 
 void Program::resetState()
 {
-    sorting = false;
+    sortManager.sorting = false;
     sortManager.iterations = 0;
     timerRunning = false;
     accumulatedTime = std::chrono::milliseconds(0);

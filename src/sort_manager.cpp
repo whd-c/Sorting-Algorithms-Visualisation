@@ -34,6 +34,27 @@ void SortManager::update()
     }
 }
 
+void SortManager::resizeElementsRect()
+{
+    // TODO: Fix elements not showing if elements > 8000
+    float currentX = WINDOW_WIDTH / 2.0f - (WINDOW_WIDTH / 5.75f);
+    constexpr float MAX_RECTANGLE_HEIGHT = 150.0f;
+    for (int i = 0; i < numElements; i++)
+    {
+        const float height = MAX_RECTANGLE_HEIGHT * (static_cast<float>((elements[i].val)) / numElements);
+        const float width = MAX_RECTANGLE_HEIGHT / numElements * 2;
+        const float x = currentX;
+        const float y = WINDOW_HEIGHT / 2.0f - height;
+        elements[i].rect = {
+            x,
+            y,
+            width,
+            height,
+        };
+        currentX += width;
+    }
+}
+
 std::vector<Element> SortManager::bubbleSort(const std::vector<Element> &elements)
 {
     std::vector<Element> sorted{elements};

@@ -3,21 +3,30 @@
 void Button::update()
 {
     btnPressed = false;
+
     if (CheckCollisionPointRec(GetMousePosition(), rect))
     {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-            btnState = 2;
+            btnState = (selected) ? SELECTED_PRESS : PRESSED;
         else
-            btnState = 1;
+            btnState = (selected) ? SELECTED_HOVER : HOVERED;
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
             btnPressed = true;
     }
     else
     {
-        btnState = 0;
+        btnState = (selected) ? SELECTED : NORMAL;
     }
-    Color drawColor = (btnState == 2 ? cPress : btnState == 1 ? cHover
-                                                              : cNormal);
+
+    static const std::unordered_map<State, Color> cMap = {
+        {NORMAL, cNormal},
+        {HOVERED, cHover},
+        {PRESSED, cPress},
+        {SELECTED, cSelected},
+        {SELECTED_HOVER, cSelectedHover},
+        {SELECTED_PRESS, cSelectedPress},
+    };
+    Color drawColor = cMap.at(btnState);
     DrawRectangleRec(rect, drawColor);
 
     Vector2 textSize = MeasureTextEx(GetFontDefault(), text, fontSize, 1);
