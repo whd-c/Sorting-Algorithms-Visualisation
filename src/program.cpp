@@ -42,6 +42,7 @@ void Program::run()
     Button selectionSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 225.0f, 150.0f, 50.0f}, "SELECTION", 20);
     Button insertionSortButton({50.0f, WINDOW_HEIGHT / 6.0f + 300.0f, 150.0f, 50.0f}, "INSERTION", 20);
     Button runSortButton({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 1.3f, 150.0f, 50.0f}, "RUN SORT", 25);
+    Slider slider({WINDOW_WIDTH / 1.35f, WINDOW_HEIGHT / 3.0f, 150.0f, 10.0f});
 
     auto beg = std::chrono::high_resolution_clock::now();
     selectedSortBtn = bubbleSortButton;
@@ -97,6 +98,7 @@ void Program::run()
         selectionSortButton.update();
         insertionSortButton.update();
         pancakeSortButton.update();
+        slider.update();
 
         if (shuffleButton.getBtnPressed())
         {

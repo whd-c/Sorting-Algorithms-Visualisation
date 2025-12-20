@@ -4,6 +4,8 @@
 #include "render.hpp"
 #include "ui/textbox.hpp"
 #include "ui/button.hpp"
+#include "ui/slider.hpp"
+
 #include <vector>
 #include <string>
 #include <chrono>

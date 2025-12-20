@@ -26,6 +26,7 @@ set(SOURCE_FILES
     src/button.cpp
     src/sort_manager.cpp
     src/render.cpp
+    src/slider.cpp
     icon/resource.rc
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
